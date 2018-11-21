@@ -36,7 +36,7 @@ def upload():
         upload.save(destination)
 
     # return send_from_directory("images", filename, as_attachment=True)
-    return render_template("complete.html", image_name=filename)
+    return render_template("complete_display_image.html", image_name=filename)
 
 @app.route('/upload/<filename>')
 def send_image(filename):
