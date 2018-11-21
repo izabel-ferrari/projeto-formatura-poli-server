@@ -1,11 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html>
+
+  <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-Uploaded
-<img src=" {{url_for('send_image', filename=image_name)}}">
-</body>
+    <title>Restauração de retratos</title>
+  </head>
+
+  <body>
+    <h1>Restauração de retratos</h1>
+    <b>Imagem selecionada: </b>
+    <img src="{{url_for('send_image', filename=image_name)}}", width="42">
+  </body>
+  
 </html>
