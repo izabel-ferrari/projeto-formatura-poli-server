@@ -1,5 +1,4 @@
 from flask import Flask, request, Response
-import findLines
 import cv2
 import os
 import json
