@@ -1,8 +1,8 @@
 import numpy as np
 import cv2
 
-face_cascade = cv2.CascadeClassifier('haarcascades/haarcascade_frontalface_default.xml')
-eye_cascade = cv2.CascadeClassifier('haarcascades/haarcascade_eye.xml')
+face_cascade = cv2.CascadeClassifier('restoration/haarcascades/haarcascade_frontalface_default.xml')
+eye_cascade = cv2.CascadeClassifier('restoration/haarcascades/haarcascade_eye.xml')
 
 def identify_face(image):
     image_gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
