@@ -34,9 +34,7 @@ def upload():
         print ("Salvando em:", os.path.join(filepath, filename))
         upload.save(os.path.join(filepath, filename))
 
-        img = cv2.imread(os.path.join(filepath, filename))
-
-        img_rest = Restoration().run_restoration(img)
+        img_rest = Restoration().run_restoration(filepath, filename)
         cv2.imwrite(filepath + 'cv2_' + filename, img_rest) #cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
 
     return render_template("complete_display_image.html", image_name_orig=filename, image_name_rest='cv2_'+filename)

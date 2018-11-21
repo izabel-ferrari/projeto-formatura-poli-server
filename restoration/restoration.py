@@ -13,7 +13,7 @@ import time
 
 class Restoration:
 
-    def run_restoration(self, img_filename):
+    def run_restoration(self, img_filepath, img_filename):
         # %%time
         # Imagem de entrada (sem extensão)
         img_name = img_filename[:-4] #'IMG_6621 (1)'
@@ -23,7 +23,7 @@ class Restoration:
 
         # %%time
         # Diretórios da imagem original, arquivos temp. e restauração final
-        images_dir = './images/'
+        images_dir = img_filepath
         interm_dir = './interm_files/'
         inpaint_dir = './inpaints/'
 
