@@ -1,14 +1,13 @@
 import os
 from uuid import uuid4
-
+import cv2
 from flask import Flask, request, render_template, send_from_directory
+from restoration.restoration_teste import Restoration
 
-__author__ = 'ibininja'
+# __author__ = 'ibininja' (original template)
 
 app = Flask(__name__)
 # app = Flask(__name__, static_folder="images")
-
-
 
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 
@@ -18,25 +17,29 @@ def index():
 
 @app.route("/upload", methods=["POST"])
 def upload():
-    target = os.path.join(APP_ROOT, 'images/')
-    # target = os.path.join(APP_ROOT, 'static/')
-    print(target)
-    if not os.path.isdir(target):
-            os.mkdir(target)
-    else:
-        print("Couldn't create upload directory: {}".format(target))
-    print(request.files.getlist("file"))
+    filepath = os.path.join(APP_ROOT, 'images/')
+    # print(filepath)
+    if not os.path.exists(filepath):
+        try:
+            os.makedirs(filepath)
+            print('Diretório criado')
+        except:
+            print('Não foi possível criar o diretório')
+    # print(request.files.getlist("file"))
     for upload in request.files.getlist("file"):
-        print(upload)
-        print("{} is the file name".format(upload.filename))
-        filename = upload.filename
-        destination = "/".join([target, filename])
-        print ("Accept incoming file:", filename)
-        print ("Save it to:", destination)
-        upload.save(destination)
+        # print(upload)
+        print("Nome do arquivo: {}".format(upload.filename))
 
-    # return send_from_directory("images", filename, as_attachment=True)
-    return render_template("complete_display_image.html", image_name=filename)
+        filename = upload.filename
+        print ("Salvando em:", os.path.join(filepath, filename))
+        upload.save(os.path.join(filepath, filename))
+
+        img = cv2.imread(os.path.join(filepath, filename))
+
+        img_rest = Restoration().run_restoration(img)
+        cv2.imwrite(filepath + 'cv2_' + filename, img_rest) #cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+
+    return render_template("complete_display_image.html", image_name_orig=filename, image_name_rest='cv2_'+filename)
 
 @app.route('/upload/<filename>')
 def send_image(filename):
