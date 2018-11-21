@@ -2,7 +2,7 @@ import os
 from uuid import uuid4
 import cv2
 from flask import Flask, request, render_template, send_from_directory
-from restoration.restoration_teste import Restoration
+from restoration.restoration import Restoration
 
 # __author__ = 'ibininja' (original template)
 
