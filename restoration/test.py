@@ -5,7 +5,7 @@ import numpy as np
 import tensorflow as tf
 import neuralgym as ng
 
-from inpaint_model import InpaintCAModel
+from restoration.inpaint_model import InpaintCAModel
 
 def run_inpaint(image='', mask='', output='output.png', checkpoint_dir=''):
     # ng.get_gpus(1)

@@ -4,10 +4,10 @@ import numpy as np
 from matplotlib import pyplot as plt
 import cv2
 
-import test
-import mask
-import roi
-import utils
+import restoration.test
+import restoration.mask
+import restoration.roi
+import restoration.utils
 
 import time
 

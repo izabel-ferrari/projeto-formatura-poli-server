@@ -6,7 +6,7 @@ import logging
 import tensorflow as tf
 import neuralgym as ng
 
-from inpaint_model import InpaintCAModel
+from restoration.inpaint_model import InpaintCAModel
 
 
 logger = logging.getLogger()
