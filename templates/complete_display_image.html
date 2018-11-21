@@ -8,8 +8,15 @@
 
   <body>
     <h1>Restauração de retratos</h1>
-    <b>Imagem selecionada: </b>
-    <img src="{{url_for('send_image', filename=image_name)}}", width="42">
+    <b>Restauração finalizada!</b><br><br>
+    <div>
+      <div>
+        <img src="{{url_for('send_image', filename=image_name)}}", width="400", style="float: left;" />
+      </div>
+      <div>
+        <img src="{{url_for('send_image', filename=image_name)}}", width="400", style="float: left;" />
+      </div>
+    </div>
   </body>
-  
+
 </html>

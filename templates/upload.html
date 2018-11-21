@@ -10,10 +10,10 @@
   <body>
     <form id="upload-form" action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data">
       <h1>Restauração de retratos</h1>
-      <b>Selecione a imagem a ser restaurada</b>
-      <input id="file-picker" type="file" name="file" accept="image/*" multiple>
-      <div id="msg"></div>
-      <input type="submit" value="Iniciar a restauração" id="upload-button">
+      <b>Selecione a imagem a ser restaurada</b><br><br>
+      <input id="file-picker" type="file" name="file" accept="image/*">
+      <div id="msg"></div><br>
+      <input type="submit" value="Iniciar a restauração!" id="upload-button">
     </form>
   </body>
 
