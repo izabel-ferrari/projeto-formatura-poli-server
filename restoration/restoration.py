@@ -89,7 +89,7 @@ class Restoration:
         face_rect_mask = mask.get_rect_mask(face)
 
         face_mask = mask.get_mask(face)
-        # mask.remove_eyes_from_mask(face_mask, true_eyes)
+        mask.remove_eyes_from_mask(face_mask, true_eyes)
 
         mixed = ~face_rect_mask & face_mask
 
