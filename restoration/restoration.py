@@ -95,7 +95,7 @@ class Restoration:
 
         face_mask_total = face_mask | face_rect_mask
 
-        # mask.remove_eyes_from_mask(face_rect_mask, true_eyes)
+        mask.remove_eyes_from_mask(face_rect_mask, true_eyes)
         mask.remove_border_from_mask(face_rect_mask)
 
         print('OK')
