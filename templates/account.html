@@ -6,7 +6,7 @@
     <h2>Upload do retrato</h2>
 
     <input type="file" id="file-input">
-    <p id="status">Please select a file</p>
+    <p id="status">Pro favor, selecione um arquivo</p>
     <img style="border:1px solid gray;width:300px;" id="preview" src="/static/media/default.png">
 
     <form method="POST" action="/submit-form/">
@@ -25,7 +25,7 @@
       const files = document.getElementById('file-input').files;
       const file = files[0];
       if(!file){
-        return alert('No file selected.');
+        return alert('Nenhum arquivo selecionado');
       }
       file.save('teste.jpg')
       document.getElementById('avatar-url').value = 'teste.jpg'
