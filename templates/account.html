@@ -1,0 +1,57 @@
+<html>
+  <body>
+
+    <h1>Edit your account</h1>
+
+    <hr>
+
+    <h2>Your avatar</h2>
+
+    <input type="file" id="file-input">
+    <p id="status">Please select a file</p>
+    <img style="border:1px solid gray;width:300px;" id="preview" src="/static/media/default.png">
+
+    <h2>Your information</h2>
+
+    <form method="POST" action="/submit-form/">
+      <input type="hidden" id="avatar-url" name="avatar-url" value="/static/media/default.png">
+
+      <hr>
+      <h2>Save changes</h2>
+
+      <input type="submit" value="Update profile">
+    </form>
+
+
+    <script type="text/javascript">
+
+
+    /*
+       Function called when file input updated. If there is a file selected, then
+       start upload procedure by asking for a signed request from the app.
+    */
+    function initUpload(){
+      const files = document.getElementById('file-input').files;
+      const file = files[0];
+      if(!file){
+        return alert('No file selected.');
+      }
+      filepath = './upload'
+    	if not os.path.exists(filepath):
+    		os.makedirs(filepath)
+    	file.save(os.path.join(filepath, file.filename))
+      img = cv2.imread(os.path.join(filepath, file.filename))
+      print(img.shape)
+      // getSignedRequest(file);
+    }
+
+    /*
+       Bind listeners when the page loads.
+    */
+    (() => {
+      document.getElementById('file-input').onchange = initUpload;
+    })();
+
+    </script>
+  </body>
+</html>
