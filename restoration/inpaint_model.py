@@ -6,7 +6,7 @@ import neuralgym as ng
 import tensorflow as tf
 from tensorflow.contrib.framework.python.ops import arg_scope
 
-from neuralgym.neuralgym.models import Model
+from neuralgym.models.model import Model
 from neuralgym.neuralgym.ops.summary_ops import scalar_summary, images_summary
 from neuralgym.neuralgym.ops.summary_ops import gradients_summary
 from neuralgym.neuralgym.ops.layers import flatten, resize
