@@ -6,12 +6,12 @@ import neuralgym as ng
 import tensorflow as tf
 from tensorflow.contrib.framework.python.ops import arg_scope
 
-from neuralgym.models import Model
-from neuralgym.ops.summary_ops import scalar_summary, images_summary
-from neuralgym.ops.summary_ops import gradients_summary
-from neuralgym.ops.layers import flatten, resize
-from neuralgym.ops.gan_ops import gan_wgan_loss, gradients_penalty
-from neuralgym.ops.gan_ops import random_interpolates
+from neuralgym.neuralgym.models import Model
+from neuralgym.neuralgym.ops.summary_ops import scalar_summary, images_summary
+from neuralgym.neuralgym.ops.summary_ops import gradients_summary
+from neuralgym.neuralgym.ops.layers import flatten, resize
+from neuralgym.neuralgym.ops.gan_ops import gan_wgan_loss, gradients_penalty
+from neuralgym.neuralgym.ops.gan_ops import random_interpolates
 
 from restoration.inpaint_ops import gen_conv, gen_deconv, dis_conv
 from restoration.inpaint_ops import random_bbox, bbox2mask, local_patch
