@@ -5,10 +5,10 @@ import numpy as np
 import tensorflow as tf
 from tensorflow.contrib.framework.python.ops import add_arg_scope
 
-from neuralgym.ops.layers import resize
-from neuralgym.ops.layers import *
-from neuralgym.ops.loss_ops import *
-from neuralgym.ops.summary_ops import *
+from neural_gym.ops.layers import resize
+from neural_gym.ops.layers import *
+from neural_gym.ops.loss_ops import *
+from neural_gym.ops.summary_ops import *
 
 
 logger = logging.getLogger()
