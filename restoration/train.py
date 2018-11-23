@@ -4,7 +4,7 @@ import socket
 import logging
 
 import tensorflow as tf
-import neuralgym as ng
+import neural_gym as ng
 
 from restoration.inpaint_model import InpaintCAModel
 

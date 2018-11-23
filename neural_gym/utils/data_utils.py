@@ -40,7 +40,7 @@ def compute_mean(sess, images, steps):
     """
     import numpy as np
     import tensorflow as tf
-    from neuralgym.utils.logger import ProgressBar
+    from neural_gym.utils.logger import ProgressBar
     bar = ProgressBar()
     mean_list = []
     for i in range(steps):
