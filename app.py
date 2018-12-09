@@ -7,13 +7,17 @@ from restoration.restoration import Restoration
 # __author__ = 'ibininja' (original template)
 
 app = Flask(__name__)
-# app = Flask(__name__, static_folder="images")
+# app = Flask(__name__, static_url_path="/static", static_folder='/static')
 
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 @app.route("/")
 def index():
     return render_template("upload.html")
+
+# @app.route("/home")
+# def home():
+#     return render_template("home.html")
 
 @app.route("/upload", methods=["POST"])
 def upload():

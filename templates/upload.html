@@ -1,52 +1,61 @@
 <!DOCTYPE html>
 <html>
 
-  <head>
-    <meta charset="UTF-8">
-    <title>Restauração de retratos</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-  </head>
+   <head>
+      <meta charset="UTF-8">
+      <title>Restauração de retratos</title>
+      <link rel="stylesheet" href="static/css/home.css">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+   </head>
 
-  <body>
-    <form id="upload-form" action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data">
+   <body>
 
-      <h1>Restauração de retratos</h1>
+      <form id="upload-form" action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data">
 
-      <b>Selecione a imagem a ser restaurada</b><br><br>
+         <h1>Restauração de retratos por inpainting baseado em aprendizado de máquina</h1>
 
-      <input id="file-picker" type="file" name="file" accept="image/*"><br>
+         <p>
+            Projeto desenvolvido pelos alunos Lucas Hirano e Izabel Ferrari para conclusão do curso de Engenharia de Computação na Escola Politécnica da USP.
+         </p>
 
-      <b id="msg"></b><br>
+         <hr>
 
-      <input type="submit" value="Iniciar a restauração!" id="upload-button">
+         <b>Selecione a imagem a ser restaurada</b><br>
 
-    </form>
-  </body>
+         <input id="file-picker" type="file" name="file" accept="image/*"><br>
 
-  <script>
-    $("#file-picker").change(function(){
-      $("#msg").text("")
-      $("#upload-button").hide();
-      var input = document.getElementById('file-picker');
+         <p id="msg"></p>
 
-      for (var i=0; i<input.files.length; i++) {
-        var ext= input.files[i].name.substring(input.files[i].name.lastIndexOf('.')+1).toLowerCase()
+         <input id="upload-button" type="submit" value="Iniciar a restauração!">
+      </form>
 
-        if (ext != 'jpg') {
-          $("#msg").text("São aceitos somente arquivos JPG. Por favor, faça o upload de outro arquivo.")
-          document.getElementById("file-picker").value ="";
-          $("#upload-button").hide();
-        } else {
-          $("#upload-button").show();
+   </body>
+
+   <script>
+      $("#file-picker").change(function(){
+        $("#msg").hide()
+        $("#upload-button").hide();
+        var input = document.getElementById('file-picker');
+
+        for (var i=0; i<input.files.length; i++) {
+          var ext= input.files[i].name.substring(input.files[i].name.lastIndexOf('.')+1).toLowerCase()
+
+          if (ext != 'jpg') {
+            $("#msg").show()
+            $("#msg").text("São aceitos somente arquivos JPG. Por favor, faça o upload de outro arquivo.")
+            document.getElementById("file-picker").value ="";
+            $("#upload-button").hide();
+          } else {
+            $("#upload-button").show();
+          }
         }
-      }
-    });
+      });
 
-    $(document).ready(function(){
-      document.getElementById("file-picker").value ="";
-      $("#upload-button").hide();
-    });
+      $(document).ready(function(){
+        document.getElementById("file-picker").value ="";
+        $("#upload-button").hide();
+      });
 
-  </script>
+   </script>
 
 </html>

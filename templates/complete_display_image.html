@@ -3,27 +3,30 @@
 
   <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="static/css/home.css">
     <title>Restauração de retratos</title>
   </head>
 
   <body>
 
-    <h1>Restauração de retratos</h1>
+    <h1>Restauração de retratos por inpainting baseado em aprendizado de máquina</h1>
 
-    <b>Restauração finalizada!</b><br><br>
+    <p>
+       Projeto desenvolvido pelos alunos Lucas Hirano e Izabel Ferrari para conclusão do curso de Engenharia de Computação na Escola Politécnica da USP.
+    </p>
 
-    <div>
+    <hr>
 
-      <div>
-        <img src="{{url_for('send_image', filename=image_name_orig)}}", height="450", style="float: left;" />
-      </div>
+    <b>Restauração finalizada!</b><br>
 
-      <div>
-        <img src="{{url_for('send_image', filename=image_name_rest)}}", height="450", style="float: left;" />
-      </div>
+    <div class="div_center_images">
+      <img class="img_image" src="{{url_for('send_image', filename=image_name_orig)}}" />
+      <img class="img_image" src="{{url_for('send_image', filename=image_name_rest)}}" />
     </div>
 
-    <button onclick="goBack()">Nova restauração</button>
+    <div class="div_center_images">
+      <button onclick="goBack()">Nova restauração</button>
+    </div>
 
   </body>
 
