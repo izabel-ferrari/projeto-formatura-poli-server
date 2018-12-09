@@ -4,3 +4,4 @@ images/*
 interm_files/*
 inpaints/*
 tf_logs/*
+neural_gym/*
