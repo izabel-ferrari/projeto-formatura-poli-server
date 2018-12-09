@@ -40,6 +40,15 @@ class Restoration:
         image = utils.validate_input_image(images_dir + img_name + img_extension, img_extension)
         print('OK')
 
+        print('Redimensionando a imagem de entrada...', end = '')
+        height, width, channels = image.shape
+        height_r = 640
+        width_r = int(width*height_r/height)
+        image_r = cv2.resize(image, (width_r, height_r))
+        cv2.imwrite(images_dir + img_name + img_extension, cv2.cvtColor(image_r, cv2.COLOR_BGR2RGB))
+        image = image_r
+        print('OK')
+
         # plt.figure()
         # plt.imshow(image)
 
