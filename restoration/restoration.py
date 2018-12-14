@@ -28,6 +28,9 @@ class Restoration:
         interm_dir = './interm_files/'
         inpaint_dir = './inpaints/'
 
+        neural_gym_logs = './neuralgym_logs'
+        tf_logs = './tf_logs'
+
         checkpoint_dir = './model_logs/release_celeba_256/'
 
         # Verifica se existem os diretórios e cria os que não existem
