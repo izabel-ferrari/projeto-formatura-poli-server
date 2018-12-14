@@ -26,7 +26,8 @@ def get_mask_by_type(img, type):
 	gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
 	# Define variables used in masking
-	value_range = 60
+	value_range = 50
+	saturation_range = 80
 	if (type == "black"):
 		min_value = np.amin(gray)
 		max_value = min_value + value_range
@@ -34,7 +35,7 @@ def get_mask_by_type(img, type):
 		max_value = np.amax(gray)
 		min_value = max_value - value_range
 	min_color = np.array([color_black, color_black, min_value])
-	max_color = np.array([color_white, color_white, max_value])
+	max_color = np.array([color_white, saturation_range, max_value])
 
 	# Create initial region mask
 	reg = cv2.inRange(hsv, min_color, max_color)
@@ -45,7 +46,7 @@ def get_mask_by_type(img, type):
 	# Create edges and dilate to get better results
 	edges = cv2.Canny(gray, 100, 150)
 	edges = cv2.dilate(edges, kernel)
-	kernel = np.ones((5,5),np.uint8)
+	# kernel = np.ones((5,5),np.uint8)
 	edges = cv2.morphologyEx(edges, cv2.MORPH_CLOSE, kernel)
 	# Intersect region and edges
 	mask = reg & edges
