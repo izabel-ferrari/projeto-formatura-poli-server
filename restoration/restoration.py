@@ -150,7 +150,6 @@ class Restoration:
         #
         # plt.show()
 
-        %%time
         print('Restaurando o rosto com Generative Inpaint with Contextual Attention...', end = ' ')
         face_inpaint = test.run_inpaint(image = interm_dir + img_name + '_face_mixed_opencv' + img_extension,
                                          mask = interm_dir + img_name + '_face_rect_mask' + img_extension,
