@@ -42,6 +42,10 @@ class Restoration:
         # %%time
         print('Validando a imagem de entrada...', end = '')
         image = utils.validate_input_image(images_dir + img_name + img_extension, img_extension)
+
+        # Salva a imagem original redimensionada em disco
+        cv2.imwrite(images_dir + img_name + img_extension, cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
+
         print('OK')
 
         # plt.figure()

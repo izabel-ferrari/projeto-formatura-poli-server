@@ -16,10 +16,10 @@ def validate_input_image(IMG_FILEPATH, IMG_EXTENSION):
 		elif (height or width) < 256:
 			raise TypeError('A imagem de entrada deve ter pelo menos 256 x 256 px, encontrado {} x {} px'.format(height, width))
 
-		if(height > IMAGE_SIZE):
-			image = cv2.resize(image, (int((width/height)*IMAGE_SIZE), IMAGE_SIZE), interpolation = cv2.INTER_AREA)
-		else:
-			image = cv2.resize(image, (int((width/height)*IMAGE_SIZE), IMAGE_SIZE), interpolation = cv2.INTER_CUBIC)
+		# if(height > IMAGE_SIZE):
+		image = cv2.resize(image, (int((width/height)*IMAGE_SIZE), IMAGE_SIZE))#, interpolation = cv2.INTER_AREA)
+		# else:
+		#	image = cv2.resize(image, (int((width/height)*IMAGE_SIZE), IMAGE_SIZE), interpolation = cv2.INTER_CUBIC)
 		# image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 		# image = cv2.cvtColor(image, cv2.COLOR_GRAY2BGR)
 		return image
