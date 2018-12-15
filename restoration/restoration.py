@@ -40,7 +40,7 @@ class Restoration:
             os.mkdir(inpaint_dir)
 
         # %%time
-        print('Validando a imagem de entrada...', end = '')
+        print('Validando a imagem de entrada...', end = ' ')
         image = utils.validate_input_image(images_dir + img_name + img_extension, img_extension)
 
         # Salva a imagem original redimensionada em disco
@@ -277,6 +277,9 @@ class Restoration:
 
         if os.path.exists(interm_dir):
             shutil.rmtree(interm_dir)
+
+        if os.path.exists(inpaint_dir):
+            shutil.rmtree(inpaint_dir)
 
         if os.path.exists(neural_gym_logs):
             shutil.rmtree(neural_gym_logs)

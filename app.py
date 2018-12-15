@@ -1,4 +1,5 @@
 import os
+import shutil
 from uuid import uuid4
 import cv2
 from flask import Flask, request, render_template, send_from_directory
@@ -10,36 +11,37 @@ app = Flask(__name__)
 # app = Flask(__name__, static_url_path="/static", static_folder='/static')
 
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
+IMAGES_FILEPATH = os.path.join(APP_ROOT, 'images/')
 
 @app.route("/")
 def index():
-    return render_template("upload.html")
+    # Limpa os arquivos da restauração anterior
+    if os.path.exists(IMAGES_FILEPATH):
+        try:
+            shutil.rmtree(IMAGES_FILEPATH)
+        except:
+            print('Dir Images exception')
 
-# @app.route("/home")
-# def home():
-#     return render_template("home.html")
+    return render_template("upload.html")
 
 @app.route("/upload", methods=["POST"])
 def upload():
-    filepath = os.path.join(APP_ROOT, 'images/')
-    # print(filepath)
-    if not os.path.exists(filepath):
+    # Cria a pasta para a nova restauração
+    if not os.path.exists(IMAGES_FILEPATH):
         try:
-            os.makedirs(filepath)
-            print('Diretório criado')
+            os.makedirs(IMAGES_FILEPATH)
         except:
-            print('Não foi possível criar o diretório')
+            print('Dir Images exception')
+
     # print(request.files.getlist("file"))
     for upload in request.files.getlist("file"):
-        # print(upload)
-        print("Nome do arquivo: {}".format(upload.filename))
-
+        print ("Recebendo o arquivo...", end = ' ')
         filename = upload.filename
-        print ("Salvando em:", os.path.join(filepath, filename))
-        upload.save(os.path.join(filepath, filename))
+        upload.save(os.path.join(IMAGES_FILEPATH, filename))
+        print('OK')
 
-        img_rest = Restoration().run_restoration(filepath, filename)
-        cv2.imwrite(filepath + 'cv2_' + filename, cv2.cvtColor(img_rest, cv2.COLOR_BGR2RGB))
+        img_rest = Restoration().run_restoration(IMAGES_FILEPATH, filename)
+        cv2.imwrite(IMAGES_FILEPATH + 'cv2_' + filename, cv2.cvtColor(img_rest, cv2.COLOR_BGR2RGB))
 
     return render_template("complete_display_image.html", image_name_orig=filename, image_name_rest='cv2_'+filename)
 
