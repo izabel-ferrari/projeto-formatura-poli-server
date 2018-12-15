@@ -33,15 +33,14 @@ def upload():
         except:
             print('Dir Images exception')
 
-    # print(request.files.getlist("file"))
-    for upload in request.files.getlist("file"):
-        print ("Recebendo o arquivo...", end = ' ')
-        filename = upload.filename
-        upload.save(os.path.join(IMAGES_FILEPATH, filename))
-        print('OK')
+    print ("Recebendo o arquivo...", end = ' ')
+    upload = request.files.getlist("file")[0]
+    filename = upload.filename
+    upload.save(os.path.join(IMAGES_FILEPATH, filename))
+    print('OK')
 
-        img_rest = Restoration().run_restoration(IMAGES_FILEPATH, filename)
-        cv2.imwrite(IMAGES_FILEPATH + 'cv2_' + filename, cv2.cvtColor(img_rest, cv2.COLOR_BGR2RGB))
+    img_rest = Restoration().run_restoration(IMAGES_FILEPATH, filename)
+    cv2.imwrite(IMAGES_FILEPATH + 'cv2_' + filename, cv2.cvtColor(img_rest, cv2.COLOR_BGR2RGB))
 
     return render_template("complete_display_image.html", image_name_orig=filename, image_name_rest='cv2_'+filename)
 
