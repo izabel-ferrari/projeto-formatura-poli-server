@@ -13,7 +13,7 @@ app = Flask(__name__)
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 IMAGES_FILEPATH = os.path.join(APP_ROOT, 'images/')
 
-@app.route("/")
+@app.route("/", methods=["GET"])
 def index():
     # Limpa os arquivos da restauração anterior
     if os.path.exists(IMAGES_FILEPATH):
@@ -24,7 +24,7 @@ def index():
 
     return render_template("upload.html")
 
-@app.route("/upload", methods=["POST"])
+@app.route("/", methods=["POST"])
 def upload():
     # Cria a pasta para a nova restauração
     if not os.path.exists(IMAGES_FILEPATH):
