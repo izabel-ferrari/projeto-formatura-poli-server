@@ -23,8 +23,6 @@ app = Flask(__name__, template_folder = './static/html', static_folder='./static
 app_root = os.path.dirname(os.path.abspath(__file__))
 images_filepath = os.path.join(app_root, 'images/')
 
-# AWS_ACCESS_KEY = 'AKIAI67AZUVYFH54PNBA'
-# AWS_ACCESS_SECRET_KEY = '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'
 BUCKET = 'restauracao'
 
 @app.route("/", methods=["GET"])
