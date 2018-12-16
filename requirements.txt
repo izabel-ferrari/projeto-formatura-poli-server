@@ -28,4 +28,5 @@ redis==3.0.1
 boto==2.48.0
 boto3==1.9.48
 botocore==1.12.48
+Pillow==5.1.0
 
