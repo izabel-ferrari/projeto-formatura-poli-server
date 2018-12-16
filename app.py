@@ -69,21 +69,17 @@ def info(job_id):
     job = Job.fetch(job_id, connection=conn)
     job_info = job.exc_info
     app.logger.debug('job_info obtido em info: ' + job_info)
-    # failed_jobs = get_failed_queue().jobs
-    # if len(failed_jobs) == 0:
-    # return str('len(failed_jobs) == 0')
-    # for failed_job in failed_jobs:
-        # app.logger.debug(failed_job.exc_info)
     return str(job_info)
 
 @app.route("/resultados/<job_id>", methods=["GET"])
 def resultados(job_id):
-
     app.logger.debug('job_id recebido em resultados: ' + job_id)
 
     job = Job.fetch(job_id, connection=conn)
     cv2_image, filename = job.result
+
     cv2_image_filename = 'cv2_' + filename
+
     cv2.imwrite(os.path.join(images_filepath, cv2_image_filename), cv2.cvtColor(cv2_image, cv2.COLOR_BGR2RGB))
 
     app.logger.debug('job_result: ' + filename)

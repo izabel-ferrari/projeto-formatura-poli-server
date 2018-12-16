@@ -29,7 +29,6 @@ def run_restoration(img_filepath, img_filename, image):
     # Verifica se existem os diretórios e cria os que não existem
     if not os.path.exists(images_dir):
         os.mkdir(images_dir)
-        cv2.imwrite(os.path.join(img_filepath, img_filename), cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
     if not os.path.exists(interm_dir):
         os.mkdir(interm_dir)
     if not os.path.exists(inpaint_dir):
@@ -37,6 +36,7 @@ def run_restoration(img_filepath, img_filename, image):
 
     print('Validando a imagem de entrada...', end = ' ')
     try:
+        cv2.imwrite(os.path.join(img_filepath, img_filename), cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
         image = cv2.cvtColor(cv2.imread(os.path.join(img_filepath, img_filename)), cv2.COLOR_BGR2RGB)
     except:
         print("ERRO: " + os.path.join(img_filepath, img_filename))
