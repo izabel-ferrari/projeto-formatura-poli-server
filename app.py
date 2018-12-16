@@ -62,15 +62,17 @@ def status(job_id):
     app.logger.debug('job_status obtido em status: ' + job_status)
     return job_status
 
-@app.route("/exc_info/", methods=["GET"])
-def info():
-    failed_jobs = get_failed_queue().jobs
-
-    if len(failed_jobs) == 0:
-        return str('len(failed_jobs) == 0')
-    for failed_job in failed_jobs:
-        app.logger.debug(failed_job.exc_info)
-    return str(failed_job.exc_info)
+@app.route("/exc_info/<job_id>", methods=["GET"])
+def info(job_id):
+    job = Job.fetch(job_id, connection=conn)
+    job_info = job.exc_info
+    app.logger.debug('job_info obtido em info: ' + job_info)
+    # failed_jobs = get_failed_queue().jobs
+    # if len(failed_jobs) == 0:
+    # return str('len(failed_jobs) == 0')
+    # for failed_job in failed_jobs:
+        # app.logger.debug(failed_job.exc_info)
+    return str(job_info)
 
 @app.route("/resultados/<job_id>", methods=["GET"])
 def resultados(job_id):

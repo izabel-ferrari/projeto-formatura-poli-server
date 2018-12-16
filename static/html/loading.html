@@ -40,7 +40,7 @@
                     }
                     if (job_status == 'failed') {
                         $.ajax({
-                            url: '/exc_info/',
+                            url: '/exc_info/' + job_id,
                             method: 'get',
                             success: function(job_info) {
                                 console.log('job_info recebido em loading.html: ' + job_info)
