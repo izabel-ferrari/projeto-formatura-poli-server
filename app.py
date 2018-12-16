@@ -2,23 +2,32 @@ import os
 import shutil
 from uuid import uuid4
 import cv2
+from datetime import datetime
 from flask import Flask, request, render_template, send_from_directory
 from restoration.restoration import Restoration
 
 # __author__ = 'ibininja' (original template)
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder = './static/html', static_folder='./static')
 # app = Flask(__name__, static_url_path="/static", static_folder='/static')
 
-APP_ROOT = os.path.dirname(os.path.abspath(__file__))
-IMAGES_FILEPATH = os.path.join(APP_ROOT, 'images/')
+app_root = os.path.dirname(os.path.abspath(__file__))
+images_filepath = os.path.join(app_root, 'images/')
 
 @app.route("/", methods=["GET"])
 def index():
+    app.logger.debug('GET')
     # Limpa os arquivos da restauração anterior
-    if os.path.exists(IMAGES_FILEPATH):
+    if os.path.exists(images_filepath):
         try:
-            shutil.rmtree(IMAGES_FILEPATH)
+            shutil.rmtree(images_filepath)
+        except:
+            print('Dir Images exception')
+
+    # Cria a pasta para a nova restauração
+    if not os.path.exists(images_filepath):
+        try:
+            os.makedirs(images_filepath)
         except:
             print('Dir Images exception')
 
@@ -26,26 +35,35 @@ def index():
 
 @app.route("/", methods=["POST"])
 def upload():
-    # Cria a pasta para a nova restauração
-    if not os.path.exists(IMAGES_FILEPATH):
-        try:
-            os.makedirs(IMAGES_FILEPATH)
-        except:
-            print('Dir Images exception')
+    app.logger.debug('POST')
+    images_filename = datetime.now().strftime('%Y%m%d-%H%M%S')+'.jpg'
 
-    print ("Recebendo o arquivo...", end = ' ')
-    upload = request.files.getlist("file")[0]
-    filename = upload.filename
-    upload.save(os.path.join(IMAGES_FILEPATH, filename))
-    print('OK')
+    app.logger.debug("Recebendo o arquivo...")
+    upload = request.files.get('image_data')
 
-    img_rest = Restoration().run_restoration(IMAGES_FILEPATH, filename)
-    cv2.imwrite(IMAGES_FILEPATH + 'cv2_' + filename, cv2.cvtColor(img_rest, cv2.COLOR_BGR2RGB))
+    while not upload:
+        upload = request.files.get('image_data')
 
-    return render_template("complete_display_image.html", image_name_orig=filename, image_name_rest='cv2_'+filename)
+    upload.save(os.path.join(images_filepath, images_filename))
+    app.logger.debug('OK')
+
+    app.logger.debug("Começando a restauração...")
+    img_rest = Restoration().run_restoration(images_filepath, images_filename)
+    app.logger.debug("OK")
+
+    app.logger.debug("Salvando as imagens em disco...")
+    cv2.imwrite(images_filepath + 'cv2_' + images_filename, cv2.cvtColor(img_rest, cv2.COLOR_BGR2RGB))
+    app.logger.debug("OK")
+
+    return images_filename
+
+@app.route("/resultados/<filename>", methods=["GET"])
+def resultados(filename):
+    return render_template("complete_display_image.html", image_name_orig=filename, image_name_rest='cv2_' + filename)
 
 @app.route('/upload/<filename>')
 def send_image(filename):
+    app.logger.debug(filename)
     return send_from_directory("images", filename)
 
 if __name__ == "__main__":

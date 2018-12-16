@@ -108,7 +108,7 @@ class Restoration:
         ridge_mask[y:y+h, x:x+w] = face_ridge_mask
         print('OK')
 
-        print('Restauração da imagem completa com OpenCV com máscara de ridges...', end=' ')
+        print('Restauração da imagem completa com OpenCV com máscara de ridges...', end = ' ')
         image_final = cv2.inpaint(image_restored, ridge_mask, 3, cv2.INPAINT_NS)
         print('OK')
 
