@@ -6,6 +6,8 @@ from datetime import datetime
 from flask import Flask, request, render_template, send_from_directory
 from restoration.restoration import run_restoration
 from rq import Queue
+from redis import Redis
+from rq.job import Job
 from worker import conn
 import time
 
@@ -47,10 +49,26 @@ def upload():
 
 @app.route("/carregando/<job_id>", methods=["GET"])
 def carregando(job_id):
-    return render_template("loading.html", job_id = job_id)
+    app.logger.debug('job_id em carregando: ' + job_id)
+    return render_template("loading.html", job_id=job_id)
 
-@app.route("/resultados/<filename>", methods=["GET"])
-def resultados(filename):
+@app.route("/status/<job_id>", methods=["GET"])
+def status(job_id):
+    time.sleep(5)
+    app.logger.debug('job_id recebido em status: ' + job_id)
+    connection = Redis()
+    job = Job.fetch(job_id, connection=connection)
+    job_status = job.status
+    app.logger.debug('job_status obtido em staus: ' + job_status)
+    return job_status
+
+@app.route("/resultados/<job_id>", methods=["GET"])
+def resultados(job_id):
+    app.logger.debug('job_id recebido em resultados: ' + job_id)
+    connection = Redis()
+    job = Job.fetch(job_id, connection=connection)
+    filename = job.result
+    app.logger.debug('job_result: ' + filename)
     return render_template("complete_display_image.html", image_name_orig=filename, image_name_rest='cv2_' + filename)
 
 @app.route('/upload/<filename>')

@@ -103,12 +103,11 @@
                         contentType: false,
                         processData: false,
                         success: function(job_id) {
-                            console.log('POST bem-sucedido')
-                            console.log(job_id)
+                            console.log('POST da imagem bem-sucedido')
+                            console.log('POST job_id enviado pelo upload.html: ' + job_id)
                             window.location.href = 'carregando/' + job_id;
                         }
                     });
-                    console.log('POST enviado')
                 }
             });
         });

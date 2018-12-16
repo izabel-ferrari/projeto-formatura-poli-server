@@ -17,6 +17,60 @@
         </p>
         <hr>
         <b>Aguarde, restauração em andamento...</b><br>
+        <p hidden id="job-id">{{job_id}}</p>
     </body>
+
+    <script>
+
+        $(document).ready(function() {
+            var job_id = document.getElementById("job-id").textContent
+            console.log('Job ID recebido no loading.html: ' + job_id + '##')
+
+            $.ajax({
+                url: '/status/' + job_id,
+                method: 'get',
+                success: function(job_status) {
+                    console.log('POST do job_status bem-sucedido')
+                    console.log('POST job_status recebido em loading.html: ' + job_status)
+                    if (job_status != 'finished') {
+                        ask_again(job_id);
+                    } else {
+                        console.log('Finished!!')
+                        window.location.href = '/resultados/' + job_id;
+                    }
+                },
+                error: function (request, status, error) {
+                    console.log('POST do job_status mal-sucedido')
+                    console.log(request)
+                    console.log(status)
+                    console.log(error)
+                }
+            });
+        });
+
+        var ask_again = function(job_id) {
+            $.ajax({
+                url: '/status/' + job_id,
+                method: 'get',
+                success: function(job_status) {
+                    console.log('POST do job_status bem-sucedido')
+                    console.log('POST job_status recebido em loading.html: ' + job_status)
+                    if (job_status != 'finished') {
+                        ask_again(job_id);
+                    } else {
+                        console.log('Finished!')
+                        window.location.href = '/resultados/' + job_id;
+                    }
+                },
+                error: function (request, status, error) {
+                    console.log('POST do job_status mal-sucedido')
+                    console.log(request)
+                    console.log(status)
+                    console.log(error)
+                }
+            });
+        }
+
+    </script>
 
 </html>
