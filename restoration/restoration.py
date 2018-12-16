@@ -8,6 +8,7 @@ from io import BytesIO
 import matplotlib.image as mpimg
 
 import numpy as np
+import imutils
 from matplotlib import pyplot as plt
 
 import cv2
@@ -42,13 +43,25 @@ def run_restoration(img_filepath, img_filename):
         os.mkdir(inpaint_dir)
 
     print('Validando a imagem de entrada...', end = ' ')
+    # image = utils.validate_input_image(images_dir + img_name + img_extension, img_extension)
     resource = boto3.resource('s3')
     bucket = resource.Bucket(BUCKET)
     image_object = bucket.Object(img_filename)
     image = mpimg.imread(BytesIO(image_object.get()['Body'].read()), 'jpg')
     cv2.imwrite(os.path.join(img_filepath, img_filename), cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
     image = cv2.cvtColor(cv2.imread(os.path.join(img_filepath, img_filename)), cv2.COLOR_BGR2RGB)
-    # image = utils.validate_input_image(images_dir + img_name + img_extension, img_extension)
+    # Verifica se a imagem está rotacionada
+    height = image.shape[0]
+    width = image.shape[1]
+    if height < width:
+        rotate = imutils.rotate_bound(image, 90)
+        height = rotate.shape[0]
+        width = rotate.shape[1]
+        image = cv2.resize(rotate, (int((width/height)*640), 640))
+        cv2.imwrite(os.path.join(img_filepath, img_filename), cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
+        print('Fazendo o upload da imagem para o S3...', end = ' ')
+        s3 = boto3.client('s3')
+        s3.upload_file(img_filepath + img_filename, 'restauracao', img_filename)
     print('OK')
 
     print('Identificando o rosto na imagem...', end = ' ')
@@ -136,8 +149,9 @@ def run_restoration(img_filepath, img_filename):
     if os.path.exists(tf_logs):
         shutil.rmtree(tf_logs)
 
-    print('Fazendo o upload da imagem para o S3...')
+    print('Fazendo o upload da imagem para o S3...', end = ' ')
     s3 = boto3.client('s3')
     s3.upload_file(img_filepath + 'cv2_' + img_filename, 'restauracao', 'cv2_' + img_filename)
+    print('OK')
 
     return img_filename
