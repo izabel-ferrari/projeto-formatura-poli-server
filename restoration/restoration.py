@@ -36,13 +36,12 @@ def run_restoration(img_filepath, img_filename, image):
         os.mkdir(inpaint_dir)
 
     print('Validando a imagem de entrada...', end = ' ')
-        try:
-            image = cv2.cvtColor(cv2.imread(os.path.join(img_filepath, img_filename)), cv2.COLOR_BGR2RGB)
-        except:
-            print("ERRO: " + os.path.join(img_filepath, img_filename))
-            print(os.listdir(path='/app/'))
-            raise
-
+    try:
+        image = cv2.cvtColor(cv2.imread(os.path.join(img_filepath, img_filename)), cv2.COLOR_BGR2RGB)
+    except:
+        print("ERRO: " + os.path.join(img_filepath, img_filename))
+        print(os.listdir(path='/app/'))
+        raise
     # image = utils.validate_input_image(images_dir + img_name + img_extension, img_extension)
     print('OK')
 
