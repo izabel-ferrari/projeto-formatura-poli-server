@@ -1,5 +1,6 @@
 import os
 import shutil
+import boto3
 from uuid import uuid4
 import cv2
 from datetime import datetime
@@ -17,6 +18,10 @@ app = Flask(__name__, template_folder = './static/html', static_folder='./static
 
 app_root = os.path.dirname(os.path.abspath(__file__))
 images_filepath = os.path.join(app_root, 'images/')
+
+# AWS_ACCESS_KEY = 'AKIAI67AZUVYFH54PNBA'
+# AWS_ACCESS_SECRET_KEY = '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'
+BUCKET = 'restauracao'
 
 @app.route("/", methods=["GET"])
 def index():
@@ -38,9 +43,13 @@ def upload():
     app.logger.debug("Recebendo o arquivo...")
     upload = request.files.get('image_data')
     upload.save(os.path.join(images_filepath, images_filename))
+    app.logger.debug('OK')
+
     app.logger.debug('Imagem salva em ' + os.path.join(images_filepath, images_filename))
     image = cv2.cvtColor(cv2.imread(os.path.join(images_filepath, images_filename)), cv2.COLOR_BGR2RGB)
-    app.logger.debug('OK')
+
+    s3 = boto3.client('s3')
+    s3.upload_file(os.path.join(images_filepath, images_filename), BUCKET, images_filename)
 
     app.logger.debug("Começando a restauração...")
     q = Queue(connection=conn)
