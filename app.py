@@ -20,21 +20,17 @@ images_filepath = os.path.join(app_root, 'images/')
 def index():
     # Limpa os arquivos da restauração anterior
     if os.path.exists(images_filepath):
-        try:
-            shutil.rmtree(images_filepath)
-        except:
-            print('Dir Images exception')
+        shutil.rmtree(images_filepath)
+
     # Cria a pasta para a nova restauração
     if not os.path.exists(images_filepath):
-        try:
-            os.makedirs(images_filepath)
-        except:
-            print('Dir Images exception')
+        os.makedirs(images_filepath)
 
     return render_template("upload.html")
 
 @app.route("/", methods=["POST"])
 def upload():
+
     images_filename = datetime.now().strftime('%Y%m%d-%H%M%S')+'.jpg'
 
     app.logger.debug("Recebendo o arquivo...")
@@ -44,14 +40,14 @@ def upload():
 
     app.logger.debug("Começando a restauração...")
     q = Queue(connection=conn)
-    result = q.enqueue(run_restoration, images_filepath, images_filename)
-    while result.status != "finished":
-        # wait
-        time.sleep(1)
-        app.logger.debug('Aguardando...')
+    job = q.enqueue(run_restoration, images_filepath, images_filename)
     app.logger.debug("OK")
 
-    return images_filename
+    return job.id
+
+@app.route("/carregando/<job_id>", methods=["GET"])
+def carregando(job_id):
+    return render_template("loading.html", job_id = job_id)
 
 @app.route("/resultados/<filename>", methods=["GET"])
 def resultados(filename):
