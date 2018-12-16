@@ -1,20 +1,22 @@
 import os
 import shutil
+
+import time
+from datetime import datetime
+
 import boto3
 from io import BytesIO
 import matplotlib.image as mpimg
-from uuid import uuid4
+
 import cv2
-from datetime import datetime
+
 from flask import Flask, request, render_template, send_from_directory
-from restoration.restoration import run_restoration
 from rq import Queue, get_failed_queue
 from redis import Redis
 from rq.job import Job
 from worker import conn
-import time
 
-# __author__ = 'ibininja' (original template)
+from restoration.restoration import run_restoration
 
 app = Flask(__name__, template_folder = './static/html', static_folder='./static')
 
@@ -40,24 +42,23 @@ def index():
 @app.route("/", methods=["POST"])
 def upload():
 
-    images_filename = datetime.now().strftime('%Y%m%d-%H%M%S')+'.jpg'
+    images_filename = datetime.now().strftime('%Y%m%d%H%M%S')+'.jpg'
 
     app.logger.debug("Recebendo o arquivo...")
     upload = request.files.get('image_data')
     upload.save(os.path.join(images_filepath, images_filename))
+    app.logger.debug('Imagem salva em ' + os.path.join(images_filepath, images_filename))
     app.logger.debug('OK')
 
-    app.logger.debug('Imagem salva em ' + os.path.join(images_filepath, images_filename))
-    image = cv2.cvtColor(cv2.imread(os.path.join(images_filepath, images_filename)), cv2.COLOR_BGR2RGB)
-
     app.logger.debug('Salvando o arquivo no S3...')
+    image = cv2.cvtColor(cv2.imread(os.path.join(images_filepath, images_filename)), cv2.COLOR_BGR2RGB)
     s3 = boto3.client('s3')
     s3.upload_file(os.path.join(images_filepath, images_filename), BUCKET, images_filename)
     app.logger.debug('OK')
 
     app.logger.debug("Começando a restauração...")
     q = Queue(connection=conn)
-    job = q.enqueue(run_restoration, images_filepath, images_filename, image)
+    job = q.enqueue(run_restoration, images_filepath, images_filename)
     app.logger.debug("OK")
 
     return job.id
@@ -69,9 +70,8 @@ def carregando(job_id):
 
 @app.route("/status/<job_id>", methods=["GET"])
 def status(job_id):
+    # app.logger.debug('job_id recebido em status: ' + job_id)
     time.sleep(5)
-    app.logger.debug('job_id recebido em status: ' + job_id)
-
     job = Job.fetch(job_id, connection=conn)
     job_status = job.status
     app.logger.debug('job_status obtido em status: ' + job_status)
@@ -81,28 +81,22 @@ def status(job_id):
 def info(job_id):
     job = Job.fetch(job_id, connection=conn)
     job_info = job.exc_info
-    app.logger.debug('job_info obtido em info: ' + job_info)
     return str(job_info)
 
 @app.route("/resultados/<job_id>", methods=["GET"])
 def resultados(job_id):
-    app.logger.debug('job_id recebido em resultados: ' + job_id)
-
     job = Job.fetch(job_id, connection=conn)
     filename = job.result
-
-    resource = boto3.resource('s3')
-    bucket = resource.Bucket(BUCKET)
-
-    image_object = bucket.Object('cv2_'+filename)
-    image = mpimg.imread(BytesIO(image_object.get()['Body'].read()), 'jpg')
-
-    cv2.imwrite(images_filepath + 'cv2_' + filename, cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
-    return render_template("complete_display_image.html", image_name_orig=filename, image_name_rest='cv2_' + filename)
+    return render_template("complete_display_image.html", image_name_orig=filename, image_name_rest='cv2_'+filename)
 
 @app.route('/upload/<filename>')
 def send_image(filename):
     # app.logger.debug(filename)
+    resource = boto3.resource('s3')
+    bucket = resource.Bucket(BUCKET)
+    image_object = bucket.Object(filename)
+    image = mpimg.imread(BytesIO(image_object.get()['Body'].read()), 'jpg')
+    cv2.imwrite(images_filepath + filename, cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
     return send_from_directory("images", filename)
 
 if __name__ == "__main__":

@@ -1,8 +1,15 @@
 import os
+import time
+
 import shutil
+
 import boto3
+from io import BytesIO
+import matplotlib.image as mpimg
+
 import numpy as np
 from matplotlib import pyplot as plt
+
 import cv2
 
 import restoration.test as test
@@ -10,9 +17,9 @@ import restoration.mask as mask
 import restoration.roi as roi
 import restoration.utils as utils
 
-import time
+def run_restoration(img_filepath, img_filename):
+    BUCKET = 'restauracao'
 
-def run_restoration(img_filepath, img_filename, image):
     # Imagem de entrada (sem extensão)
     img_name = img_filename[:-4]
     # Extensão da imagem de entrada
@@ -35,13 +42,12 @@ def run_restoration(img_filepath, img_filename, image):
         os.mkdir(inpaint_dir)
 
     print('Validando a imagem de entrada...', end = ' ')
-    try:
-        cv2.imwrite(os.path.join(img_filepath, img_filename), cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
-        image = cv2.cvtColor(cv2.imread(os.path.join(img_filepath, img_filename)), cv2.COLOR_BGR2RGB)
-    except:
-        print("ERRO: " + os.path.join(img_filepath, img_filename))
-        print(os.listdir(path='/app/'))
-        raise
+    resource = boto3.resource('s3')
+    bucket = resource.Bucket(BUCKET)
+    image_object = bucket.Object(img_filename)
+    image = mpimg.imread(BytesIO(image_object.get()['Body'].read()), 'jpg')
+    cv2.imwrite(os.path.join(img_filepath, img_filename), cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
+    image = cv2.cvtColor(cv2.imread(os.path.join(img_filepath, img_filename)), cv2.COLOR_BGR2RGB)
     # image = utils.validate_input_image(images_dir + img_name + img_extension, img_extension)
     print('OK')
 
