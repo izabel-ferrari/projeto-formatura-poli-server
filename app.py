@@ -39,7 +39,7 @@ def upload():
     upload = request.files.get('image_data')
     upload.save(os.path.join(images_filepath, images_filename))
     app.logger.debug('Imagem salva em ' + os.path.join(images_filepath, images_filename))
-    image = cv2.cvtColor(cv2.imread(os.path.join(img_filepath, img_filename)), cv2.COLOR_BGR2RGB)
+    image = cv2.cvtColor(cv2.imread(os.path.join(images_filepath, images_filename)), cv2.COLOR_BGR2RGB)
     app.logger.debug('OK')
 
     app.logger.debug("Começando a restauração...")
