@@ -5,7 +5,7 @@ import cv2
 from datetime import datetime
 from flask import Flask, request, render_template, send_from_directory
 from restoration.restoration import run_restoration
-from rq import Queue
+from rq import Queue, get_failed_queue
 from redis import Redis
 from rq.job import Job
 from worker import conn
