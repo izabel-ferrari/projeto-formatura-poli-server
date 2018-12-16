@@ -5,6 +5,9 @@ import cv2
 from datetime import datetime
 from flask import Flask, request, render_template, send_from_directory
 from restoration.restoration import Restoration
+from rq import Queue
+from worker import conn
+from utils import count_words_at_url
 
 # __author__ = 'ibininja' (original template)
 
@@ -16,20 +19,23 @@ images_filepath = os.path.join(app_root, 'images/')
 
 @app.route("/", methods=["GET"])
 def index():
-    app.logger.debug('GET')
-    # Limpa os arquivos da restauração anterior
-    if os.path.exists(images_filepath):
-        try:
-            shutil.rmtree(images_filepath)
-        except:
-            print('Dir Images exception')
-
-    # Cria a pasta para a nova restauração
-    if not os.path.exists(images_filepath):
-        try:
-            os.makedirs(images_filepath)
-        except:
-            print('Dir Images exception')
+    q = Queue(connection=conn)
+    result = q.enqueue(count_words_at_url, 'http://heroku.com')
+    
+    # app.logger.debug('GET')
+    # # Limpa os arquivos da restauração anterior
+    # if os.path.exists(images_filepath):
+    #     try:
+    #         shutil.rmtree(images_filepath)
+    #     except:
+    #         print('Dir Images exception')
+    #
+    # # Cria a pasta para a nova restauração
+    # if not os.path.exists(images_filepath):
+    #     try:
+    #         os.makedirs(images_filepath)
+    #     except:
+    #         print('Dir Images exception')
 
     return render_template("upload.html")
 

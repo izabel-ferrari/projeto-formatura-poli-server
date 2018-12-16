@@ -23,3 +23,5 @@ six==1.11.0
 tensorboard==1.7.0
 tensorflow==1.7.0
 termcolor==1.1.0
+rq==0.13.0
+
