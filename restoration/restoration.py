@@ -12,7 +12,7 @@ import restoration.utils as utils
 
 import time
 
-def run_restoration(img_filepath, img_filename):
+def run_restoration(img_filepath, img_filename, image):
     # Imagem de entrada (sem extensão)
     img_name = img_filename[:-4]
     # Extensão da imagem de entrada
@@ -27,18 +27,22 @@ def run_restoration(img_filepath, img_filename):
     checkpoint_dir = './model_logs/release_celeba_256/'
 
     # Verifica se existem os diretórios e cria os que não existem
+    if not os.path.exists(images_dir):
+        os.mkdir(images_dir)
+        cv2.imwrite(os.path.join(img_filepath, img_filename), cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
     if not os.path.exists(interm_dir):
         os.mkdir(interm_dir)
     if not os.path.exists(inpaint_dir):
         os.mkdir(inpaint_dir)
 
     print('Validando a imagem de entrada...', end = ' ')
-    try:
-        image = cv2.cvtColor(cv2.imread(os.path.join(img_filepath, img_filename)), cv2.COLOR_BGR2RGB)
-    except:
-        print("ERRO: " + os.path.join(img_filepath, img_filename))
-        print(os.listdir(path='/app/'))
-        raise
+        try:
+            image = cv2.cvtColor(cv2.imread(os.path.join(img_filepath, img_filename)), cv2.COLOR_BGR2RGB)
+        except:
+            print("ERRO: " + os.path.join(img_filepath, img_filename))
+            print(os.listdir(path='/app/'))
+            raise
+
     # image = utils.validate_input_image(images_dir + img_name + img_extension, img_extension)
     print('OK')
 
