@@ -33,7 +33,8 @@ def run_restoration(img_filepath, img_filename):
         os.mkdir(inpaint_dir)
 
     print('Validando a imagem de entrada...', end = ' ')
-    image = utils.validate_input_image(images_dir + img_name + img_extension, img_extension)
+    image = cv2.cvtColor(cv2.imread(os.path.join(images_filepath, images_filename)), cv2.COLOR_BGR2RGB)
+    # image = utils.validate_input_image(images_dir + img_name + img_extension, img_extension)
     print('OK')
 
     print('Identificando o rosto na imagem...', end = ' ')
