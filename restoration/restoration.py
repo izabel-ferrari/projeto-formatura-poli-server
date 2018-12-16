@@ -1,6 +1,6 @@
 import os
 import shutil
-
+import boto3
 import numpy as np
 from matplotlib import pyplot as plt
 import cv2
@@ -118,7 +118,6 @@ def run_restoration(img_filepath, img_filename, image):
     print('Restauração da imagem completa com OpenCV com máscara de ridges...', end = ' ')
     image_final = cv2.inpaint(image_restored, ridge_mask, 3, cv2.INPAINT_NS)
     cv2.imwrite(img_filepath + 'cv2_' + img_filename, cv2.cvtColor(image_final, cv2.COLOR_BGR2RGB))
-    image_rest = cv2.cvtColor(cv2.imread(img_filepath + 'cv2_' + img_filename), cv2.COLOR_BGR2RGB)
     print('OK')
 
     # Exclui os diretórios de logs
@@ -131,4 +130,8 @@ def run_restoration(img_filepath, img_filename, image):
     if os.path.exists(tf_logs):
         shutil.rmtree(tf_logs)
 
-    return image_rest
+    print('Fazendo o upload da imagem para o S3...')
+    s3 = boto3.client('s3')
+    s3.upload_file(img_filepath + 'cv2_' + img_filename, 'restauracao', 'cv2_' + img_filename)
+
+    return img_filename

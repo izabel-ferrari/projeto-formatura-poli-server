@@ -1,6 +1,8 @@
 import os
 import shutil
 import boto3
+from io import BytesIO
+import matplotlib.image as mpimg
 from uuid import uuid4
 import cv2
 from datetime import datetime
@@ -48,8 +50,10 @@ def upload():
     app.logger.debug('Imagem salva em ' + os.path.join(images_filepath, images_filename))
     image = cv2.cvtColor(cv2.imread(os.path.join(images_filepath, images_filename)), cv2.COLOR_BGR2RGB)
 
+    app.logger.debug('Salvando o arquivo no S3...')
     s3 = boto3.client('s3')
     s3.upload_file(os.path.join(images_filepath, images_filename), BUCKET, images_filename)
+    app.logger.debug('OK')
 
     app.logger.debug("Começando a restauração...")
     q = Queue(connection=conn)
@@ -85,16 +89,15 @@ def resultados(job_id):
     app.logger.debug('job_id recebido em resultados: ' + job_id)
 
     job = Job.fetch(job_id, connection=conn)
-    # filename = job.result
-    # cv2_image_filename = 'cv2_' + filename
-    # app.logger.debug('job_result: ' + filename)
-    # app.logger.debug(os.listdir(path='/app/'))
+    filename = job.result
 
-    img_filename = 'oi.jpg'
-    cv2.imwrite(img_filepath + 'cv2_' + img_filename, cv2.cvtColor(job.result, cv2.COLOR_BGR2RGB))
+    resource = boto3.resource('s3')
+    bucket = resource.Bucket(BUCKET)
 
-    app.logger.debug(os.listdir(path='/app/images/'))
+    image_object = bucket.Object('cv2_'+filename)
+    image = mpimg.imread(BytesIO(image_object.get()['Body'].read()), 'jpg')
 
+    cv2.imwrite(images_filepath + 'cv2_' + filename, cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
     return render_template("complete_display_image.html", image_name_orig=filename, image_name_rest='cv2_' + filename)
 
 @app.route('/upload/<filename>')
