@@ -81,12 +81,14 @@ def status(job_id):
 def info(job_id):
     job = Job.fetch(job_id, connection=conn)
     job_info = job.exc_info
+    app.logger.debug('job_info recebido em exc_info: ' + job_info)
     return str(job_info)
 
 @app.route("/resultados/<job_id>", methods=["GET"])
 def resultados(job_id):
     job = Job.fetch(job_id, connection=conn)
     filename = job.result
+    app.logger.debug('filename em job: ' + filename)
     return render_template("complete_display_image.html", image_name_orig=filename, image_name_rest='cv2_'+filename)
 
 @app.route('/upload/<filename>')
