@@ -40,7 +40,7 @@ def upload():
     upload.save(os.path.join(images_filepath, images_filename))
     app.logger.debug('OK')
 
-    app.logger('Imagem salva em ' + os.path.join(images_filepath, images_filename))
+    app.logger.debug('Imagem salva em ' + os.path.join(images_filepath, images_filename))
 
     app.logger.debug("Começando a restauração...")
     q = Queue(connection=conn)
