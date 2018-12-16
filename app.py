@@ -80,6 +80,7 @@ def resultados(job_id):
     cv2_image_filename = 'cv2_' + filename
     app.logger.debug('job_result: ' + filename)
     app.logger.debug(os.listdir(path='/app/'))
+    app.logger.debug(os.listdir(path='/app/images/'))
 
     return render_template("complete_display_image.html", image_name_orig=filename, image_name_rest='cv2_' + filename)
 
