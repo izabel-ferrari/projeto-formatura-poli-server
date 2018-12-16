@@ -25,45 +25,30 @@
         $(document).ready(function() {
             var job_id = document.getElementById("job-id").textContent
             console.log('Job ID recebido no loading.html: ' + job_id + '##')
+            ask_job(job_id);
 
-            $.ajax({
-                url: '/status/' + job_id,
-                method: 'get',
-                success: function(job_status) {
-                    console.log('POST do job_status bem-sucedido')
-                    console.log('POST job_status recebido em loading.html: ' + job_status)
-                    if (job_status != 'finished') {
-                        ask_again(job_id);
-                    } else {
-                        console.log('Finished!!')
-                        window.location.href = '/resultados/' + job_id;
-                    }
-                },
-                error: function (request, status, error) {
-                    console.log('POST do job_status mal-sucedido')
-                    console.log(request)
-                    console.log(status)
-                    console.log(error)
-                }
-            });
         });
 
-        var ask_again = function(job_id) {
+        var ask_job = function(job_id) {
             $.ajax({
                 url: '/status/' + job_id,
                 method: 'get',
                 success: function(job_status) {
-                    console.log('POST do job_status bem-sucedido')
-                    console.log('POST job_status recebido em loading.html: ' + job_status)
+                    console.log('job_status recebido em loading.html: ' + job_status)
                     if (job_status != 'finished') {
-                        ask_again(job_id);
+                        ask_job(job_id);
                     }
                     if (job_status == 'failed') {
-                        console.log('Failed!')
+                        $.ajax({
+                            url: '/exc_info/',
+                            method: 'get',
+                            success: function(job_info) {
+                                console.log('job_info recebido em loading.html: ' + job_info)
+                            }
+                        });
                         window.location.href = '/';
                     }
                     if (job_status == 'finished') {
-                        console.log('Finished!')
                         window.location.href = '/resultados/' + job_id;
                     }
                 },

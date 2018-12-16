@@ -59,8 +59,18 @@ def status(job_id):
 
     job = Job.fetch(job_id, connection=conn)
     job_status = job.status
-    app.logger.debug('job_status obtido em staus: ' + job_status)
+    app.logger.debug('job_status obtido em status: ' + job_status)
     return job_status
+
+@app.route("/exc_info/", methods=["GET"])
+def info():
+    try:
+        failed_jobs = get_failed_queue().jobs
+        for failed_job in failed_jobs:
+            app.logger.debug(failed_job.exc_info)
+    except:
+        return ('Nenhum job failed')
+    return str(failed_job.exc_info)
 
 @app.route("/resultados/<job_id>", methods=["GET"])
 def resultados(job_id):
