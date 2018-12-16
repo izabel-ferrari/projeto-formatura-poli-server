@@ -56,8 +56,8 @@ def carregando(job_id):
 def status(job_id):
     time.sleep(5)
     app.logger.debug('job_id recebido em status: ' + job_id)
-    connection = Redis()
-    job = Job.fetch(job_id, connection=connection)
+
+    job = Job.fetch(job_id, connection=conn)
     job_status = job.status
     app.logger.debug('job_status obtido em staus: ' + job_status)
     return job_status
@@ -65,8 +65,8 @@ def status(job_id):
 @app.route("/resultados/<job_id>", methods=["GET"])
 def resultados(job_id):
     app.logger.debug('job_id recebido em resultados: ' + job_id)
-    connection = Redis()
-    job = Job.fetch(job_id, connection=connection)
+
+    job = Job.fetch(job_id, connection=conn)
     filename = job.result
     app.logger.debug('job_result: ' + filename)
     return render_template("complete_display_image.html", image_name_orig=filename, image_name_rest='cv2_' + filename)
