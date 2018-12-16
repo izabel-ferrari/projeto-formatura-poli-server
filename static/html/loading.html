@@ -57,7 +57,12 @@
                     console.log('POST job_status recebido em loading.html: ' + job_status)
                     if (job_status != 'finished') {
                         ask_again(job_id);
-                    } else {
+                    }
+                    if (job_status == 'failed') {
+                        console.log('Failed!')
+                        window.location.href = '/';
+                    }
+                    if (job_status == 'finished') {
                         console.log('Finished!')
                         window.location.href = '/resultados/' + job_id;
                     }
