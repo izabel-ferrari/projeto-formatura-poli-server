@@ -16,7 +16,7 @@
             Projeto desenvolvido pelos alunos Lucas Hirano e Izabel Ferrari para conclusão do curso de Engenharia de Computação na Escola Politécnica da USP.
         </p>
         <hr>
-        <b>Selecione a imagem a ser restaurada</b><br>
+        <b id="p-msg">Selecione a imagem a ser restaurada</b><br>
         <input id="file-picker" type="file" name="file" accept="image/*"/>
         <p id="msg"></p>
         <form id="upload-form" enctype="multipart/form-data" method="post">
@@ -91,7 +91,13 @@
 
         $(document).on("imageResized", function (event) {
             $("#upload-button").show();
+
             $("#upload-button").click(function() {
+                
+                $("#p-msg").text("Aguarde, restauração em andamento...")
+                $("#upload-button").hide();
+                $("#file-picker").hide();
+
                 var data = new FormData($("form[id*='upload-form']")[0]);
                 if (event.blob && event.url) {
                     data.append('image_data', event.blob);
