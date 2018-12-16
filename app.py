@@ -76,13 +76,10 @@ def resultados(job_id):
     app.logger.debug('job_id recebido em resultados: ' + job_id)
 
     job = Job.fetch(job_id, connection=conn)
-    cv2_image, filename = job.result
-
+    filename = job.result
     cv2_image_filename = 'cv2_' + filename
-
-    cv2.imwrite(os.path.join(images_filepath, cv2_image_filename), cv2.cvtColor(cv2_image, cv2.COLOR_BGR2RGB))
-
     app.logger.debug('job_result: ' + filename)
+    app.logger.debug(os.listdir(path='/app/'))
 
     return render_template("complete_display_image.html", image_name_orig=filename, image_name_rest='cv2_' + filename)
 

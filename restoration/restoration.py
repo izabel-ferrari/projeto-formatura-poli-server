@@ -130,4 +130,4 @@ def run_restoration(img_filepath, img_filename, image):
     if os.path.exists(tf_logs):
         shutil.rmtree(tf_logs)
 
-    return image_final, img_filename
+    return img_filename
