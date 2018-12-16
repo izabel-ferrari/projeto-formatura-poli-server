@@ -64,12 +64,12 @@ def status(job_id):
 
 @app.route("/exc_info/", methods=["GET"])
 def info():
-    try:
-        failed_jobs = get_failed_queue().jobs
-        for failed_job in failed_jobs:
-            app.logger.debug(failed_job.exc_info)
-    except:
-        return ('Nenhum job failed')
+    failed_jobs = get_failed_queue().jobs
+
+    if len(failed_jobs) == 0:
+        return str('len(failed_jobs) == 0')
+    for failed_job in failed_jobs:
+        app.logger.debug(failed_job.exc_info)
     return str(failed_job.exc_info)
 
 @app.route("/resultados/<job_id>", methods=["GET"])
