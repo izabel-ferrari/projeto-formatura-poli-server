@@ -25,4 +25,7 @@ tensorflow==1.7.0
 termcolor==1.1.0
 rq==0.13.0
 redis==3.0.1
+boto==2.48.0
+boto3==1.9.48
+botocore==1.12.48
 
