@@ -29,6 +29,25 @@ h3,h4,h5,h6{
     color:#494949
 }
 
+input[type="file"] {
+    display: none;
+}
+
+.custom-file-upload, button, input {
+    background-color: #267CB9;
+    border: none;
+    border-radius: 12px;
+    display: inline-block;
+    cursor: pointer;
+    margin-top: 10px;
+    padding: 12px 28px;
+    font-size: 16px;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-weight: bold;
+}
+
 #msg {
   color: red;
   font-size: 14px;
@@ -36,7 +55,7 @@ h3,h4,h5,h6{
 }
 
 .div_center_images {
-  text-align: center;
+    text-align: center;
 }
 
 .img_image {
