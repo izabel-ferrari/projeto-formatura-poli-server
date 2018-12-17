@@ -6,13 +6,6 @@ body{
     font-weight:400
 }
 
-@media only screen and (max-width: 768px) {
-  /* For mobile phones: */
-  body {
-    color: red;
-  }
-}
-
 h1{
     color:#267CB9;
     margin:0 0 20px
